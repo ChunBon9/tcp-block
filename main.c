@@ -156,10 +156,10 @@ void setChecksum(pkt *p, uint16_t len) {
 	p->tcp->chksum = htons((uint16_t)temp ^ 0xFFFF);
 }
 
-bool findPattern(char *data, char *pattern) {
-	int len = strlen(data) - strlen(pattern); 
+bool findPattern(char *data, char *pattern, int dataSize) {
+	int len = dataSize - strlen(pattern); 
 	for(int i=0; i<len; i++) {
-		if(strncmp(data+i, pattern, strlen(pattern)) == 0) return true;
+		if(memcmp(data+i, pattern, strlen(pattern)) == 0) return true;
 	}
 	return false;
 }
@@ -209,7 +209,7 @@ int main(int argc, char* argv[]) {
 			packetSize = sizeof(ethHeader) + sizeof(ipHeader) + sizeof(tcpHeader);
 			dataSize = ntohs(org.ip->totalLen) - (headerSize - sizeof(ethHeader));
 			org.data[dataSize] = '\0';
-			if(!findPattern(org.data, pattern)) continue;
+			if(!findPattern(org.data, pattern, dataSize)) continue;
 			printf("GATCHA!\n");
 			
 			memcpy(forwordPacket, packet, packetSize);
