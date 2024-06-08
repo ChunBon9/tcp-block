@@ -243,7 +243,7 @@ int main(int argc, char* argv[]) {
 			forword.tcp->dataOff_Reserved_Flags = htons((sizeof(tcpHeader) >> 2) << 12 | (16 | RST_FLAG));
 			backword.tcp->dataOff_Reserved_Flags = htons((sizeof(tcpHeader) >> 2) << 12 | (16 | FIN_FLAG));
 			
-			memcpy(backword.data, redirect, strlen(redirect));
+			memcpy(backwordPacket + packetSize, redirect, strlen(redirect));
 			backword.data[strlen(redirect)] = 0;
 			
 			setChecksum(&forword, (uint16_t)sizeof(tcpHeader));
